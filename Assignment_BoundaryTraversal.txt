@@ -1,0 +1,97 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+    int data;
+    struct node *right;
+    struct node *left;
+};
+struct node *root=NULL;
+struct node *rootcpy=NULL;
+int i=0;
+int flag=0;
+int arrrev[30];
+struct node *createnode(int ele)
+{
+    struct node newnode=(struct node)malloc(sizeof(struct node));
+    newnode->data=ele;
+    newnode->left=NULL;
+    newnode->right=NULL;
+    return newnode;
+}
+void inorder(struct node *root)
+    {
+        if(root==NULL)
+        {
+            return;
+        }
+        inorder(root->left);
+        printf(" %d",root->data);
+        inorder(root->right);
+    }
+void postorder(struct node *root)
+    {
+        if(root==NULL)
+        {
+            return;
+        }
+        postorder(root->left);
+        postorder(root->right);
+        if(root->left==NULL || root->right==NULL)
+        {
+        printf(" %d",root->data);
+        }
+    }
+void boundary(struct node *root)
+{
+   if(root==NULL)
+    {
+        return;
+    }
+    if(root->left!=NULL)
+    {
+    printf(" %d",root->data);
+    }
+    boundary(root->left);
+}
+void boundaryright(struct node *root,struct node *rootcpy)
+{
+    if(root==NULL)
+    {
+        flag=1;
+        return;
+    }
+    if(root!=NULL && root!=rootcpy)
+    {
+    arrrev[i]=root->data;
+    i++;
+    }
+    boundaryright(root->right,rootcpy);
+    if(flag==1)
+    {   flag=0;
+        for(int j=i-2;j>=0;j--)
+        {
+            printf(" %d",arrrev[j]);
+        }
+    }
+    
+}
+int main()
+{   
+     root=createnode(1);
+     root->left=createnode(2);
+     root->right=createnode(3);
+     root->left->left=createnode(4);
+     root->left->right=createnode(5);
+     root->right->left=createnode(6);
+     root->right->right=createnode(7);
+     root->left->right->left=createnode(8);
+     root->left->right->right=createnode(9);
+     rootcpy=root;
+     printf("\nINORDER TRAVERSAL:");
+     inorder(root);
+     printf("\nBOUNDARY TRAVESAL:");
+     boundary(root);
+     postorder(root);
+     boundaryright(root,rootcpy);
+    return 0;
+}
