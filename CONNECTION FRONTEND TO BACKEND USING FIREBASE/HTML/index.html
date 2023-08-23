@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD FIREBASE</title>
+    <link rel="stylesheet" href="CSS.css">
+    <!-- <script src="javaScript.js"></script> -->
+</head>
+<body>
+    <div id="enterdetails">
+        <h1>Enter Details</h1>
+        <h4>ID</h4>
+        <input id="enterid" type="text">
+        <h4>NAME</h4>
+        <input id="entername" type="text">
+        <h4>Age</h4>
+        <input id="enterage" type="number">
+        <br>
+        <br>
+        <button id="insert">INSERT</button>
+        <button id="update">UPDATE</button>
+        <button id="remove">REMOVE</button>
+        <br>
+        <br>
+    </div>
+
+    <div id="finddetails">
+        <h1>Find by ID</h1>
+        <h4>ID</h4>
+        <input id="findid" type="text">
+        <br>
+        <br>
+        <button id="find">FIND</button>
+        <h3 id="findname" type="text"></h3>
+        <h3 id="findage" type="text"></h3>
+        <br>
+        <br> 
+    </div>
+
+
+        <script type="module">        
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyByUB3T6T1tbigE4hJMSET5aaNq5mAoJ-I",
+  authDomain: "crud-using-firebase-8ba02.firebaseapp.com",
+  projectId: "crud-using-firebase-8ba02",
+  storageBucket: "crud-using-firebase-8ba02.appspot.com",
+  messagingSenderId: "446076341293",
+  appId: "1:446076341293:web:7780e862e5c3c609fe3ca4",
+  measurementId: "G-06Y96K13E9"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+import{getDatabase,set,get,update,remove,ref,child}
+from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js"
+
+const db=getDatabase();
+
+var enterID=document.querySelector("#enterid");
+var enterName=document.querySelector("#entername");
+var enterAge=document.querySelector("#enterage");
+var findID=document.querySelector("#findid");
+var findName=document.querySelector("#findname");
+var findAge=document.querySelector("#findage");
+
+
+var insertbtn=document.querySelector("#insert");
+var updatebtn=document.querySelector("#update");
+var removebtn=document.querySelector("#remove");
+var findbtn=document.querySelector("#find");
+
+
+insertbtn.addEventListener('click',Insertdata);
+updatebtn.addEventListener('click',Updatedata);
+removebtn.addEventListener('click',Removedata);
+findbtn.addEventListener('click',Finddata);
+
+function Insertdata()
+{
+
+    set(ref(db,"People/" + enterID.value),{
+        Name:enterName.value,
+        ID:enterID.value,
+        Age:enterAge.value,
+    })
+    .then(()=>{
+        alert("DATA ADDED SUCCESSFULLY :)")
+    })
+    .catch((error)=>{
+        alert(error)
+    });
+}
+
+function Finddata()
+{
+    const dbref=ref(db);
+    get(child(dbref,"People/" + findID.value))
+    .then((snapshot)=>{
+        if(snapshot.exists())
+        {
+                findName.innerHTML="NAME:" + snapshot.val().Name;
+                findAge.innerHTML="AGE:" + snapshot.val().Age;
+        }
+        else{
+            alert("NO DATA FOUND :(")
+        }
+    })
+    .catch((error)=>{
+        alert(error)
+    });
+
+}
+
+
+
+function Updatedata()
+{
+    update(ref(db,"People/" + enterID.value),
+    {
+        Name:enterName.value,
+        Age:enterAge.value,
+    })
+    .then(()=>{
+        alert("DATA UPDATED :)");
+    })
+    .catch((error)=>
+    {
+        alert(error);
+    });
+}
+function RemoveData(){
+            remove(ref(db,"People/" + enterID.value))
+            .then(()=>{
+                alert("Data removed Successfully !")
+            })
+            .catch((error)=>{
+                alert(error);
+            });
+        } 
+
+function Removedata()
+{
+    remove(ref(db,"People/" + enterID.value))
+    .then(()=>{
+        alert("Data Removed :)");
+    })
+    .catch((error)=>
+    {
+        alert(error);
+    })
+}
+
+        </script>
+</body>
+</html>

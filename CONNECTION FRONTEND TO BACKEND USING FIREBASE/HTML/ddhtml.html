@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD APP -w- BE</title>
+
+    <style>
+        body{text-align: center;}
+
+        #enterDetails{float: left;width: 50%;background-color:  #f42469;color: floralwhite;}
+
+        #findDetails{float: right;width: 50%;background-color: floralwhite;color: solid palevioletred;}
+        
+        input{width: 120px;}
+    </style>
+
+</head>
+<body>
+
+    <div id="enterDetails"> 
+        <h1>Enter Details</h1>
+        <h4>ID</h4>
+        <input id="enterID" type="number">
+
+        <h4>Name</h4>
+        <input id="enterName" type="text">
+
+        <h4>Role</h4>
+        <input id="enterRole" type="text">
+
+        <h4>Salary</h4>
+        <input id="enterSalary" type="number">
+        <br><br>
+
+        <button id="insert">INSERT</button>
+        <button id="update">UPDATE</button>
+        <button id="remove">REMOVE</button>
+
+        <br><br>
+
+    </div>
+
+
+    <div id="findDetails">
+        <h1>Find by ID</h1>
+        <h4>ID</h4>
+        <input id="findID" type="text"> <br><br>
+
+        <button id="find">FIND</button><br><br>
+
+        <h3 id="findName" type="text "></h3>
+        <h3 id="findRole" type="text"></h3>
+        <h3 id="findSalary" type="number"></h3>
+        <br><br>
+
+
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
+        
+        //import headers
+      
+       
+        // Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyDSXhjZog8g20VRSk4ATAR1GR9GEAO5aqU",
+          authDomain: "crud-application-70d07.firebaseapp.com",
+          databaseURL: "https://crud-application-70d07-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "crud-application-70d07",
+          storageBucket: "crud-application-70d07.appspot.com",
+          messagingSenderId: "137353711726",
+          appId: "1:137353711726:web:278543f1704167d7f4967f",
+          measurementId: "G-E685R1TLTL"
+        };
+       // Your web app's Firebase configuration
+
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        import{getDatabase,set,get,update,remove,ref,child} 
+        from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js" 
+        
+        const db=getDatabase();
+
+        var enterID = document.querySelector("#enterID");
+        var enterName = document.querySelector("#enterName");
+        var enterRole = document.querySelector("#enterRole");
+        var enterSalary = document.querySelector("#enterSalary");
+        var findID=document.querySelector("#findID");
+        var findName=document.querySelector("#findName");
+        var findRole=document.querySelector("#findRole");
+        var findSalary=document.querySelector("#findSalary");
+
+
+        var  insertBtn =document.querySelector("#insert");
+        var  updateBtn =document.querySelector("#update");
+        var  removeBtn =document.querySelector("#remove");
+        var  findBtn =document.querySelector("#find");
+        
+
+
+        function InsertData(){
+            set(ref(db,"People/" + enterID.value), {
+                Name : enterName.value,
+                ID : enterID.value,
+                Role : enterRole.value,
+                Salary : enterSalary.value
+            })
+            .then(()=>{
+               alert("Data added successfully !")   
+            })
+            .catch((error)=>{
+                alert(error)  
+            });    
+        }
+
+        function FindData(){
+            const  dbref= ref(db);
+
+            get(child(dbref,"People/" + findID.value))
+            .then((snapshot)=>{
+                if(snapshot.exists()){
+                    findName.innerHTML = "Name : " + snapshot.val().Name;
+                    findRole.innerHTML="Role : " +snapshot.val().Role;
+                    findSalary.innerHTML="Salary : " +snapshot.val().Salary;
+                }
+                else{
+                    alert("No Data Found !" );
+                }
+            })
+            .catch((error)=>{
+                alert(error);
+            })
+        }
+
+        function UpdateData(){
+            update(ref(db,"People/" + enterID.value),
+            { Name: enterName.value,
+              Role: enterRole.value,
+              Salary:enterSalary.value
+            })
+            .then(()=>{
+                alert("Data has been Updated Successfully !")
+            })
+            .catch((error)=>{
+                alert(error);
+            });
+        }
+
+        function RemoveData(){
+            remove(ref(db,"People/" + enterID.value))
+            .then(()=>{
+                alert("Data removed Successfully !")
+            })
+            .catch((error)=>{
+                alert(error);
+            });
+        } 
+
+
+        insertBtn.addEventListener('click',InsertData);
+        updateBtn.addEventListener('click',UpdateData);
+        removeBtn.addEventListener('click',RemoveData);
+        findBtn.addEventListener('click',FindData);
+        
+
+    </script>
+</body>
+</html>

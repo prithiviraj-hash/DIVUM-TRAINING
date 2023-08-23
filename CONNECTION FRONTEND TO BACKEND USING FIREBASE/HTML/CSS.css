@@ -1,0 +1,22 @@
+body{
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+#enterdetails
+{
+    float:left;
+    width:50%;
+    background-color: burlywood;
+    color:azure
+}
+#finddetails
+{
+    float:left;
+    width:50%;
+    background-color:brown;
+    color:azure
+}
+input
+{
+    width:120px;
+}
